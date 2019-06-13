@@ -18,6 +18,23 @@ function updateEveryting() {
   frame++;
   rain.update();
   player.update();
+
+  for (let i = 0; i < rain.drops.length; i++) {
+    if (checkCollision(player, rain.drops[i])) {
+      player.getWet();
+      rain.drops.splice(i, 1); // Remove the element at position i
+    }
+  }
+}
+
+// Return true when there is a collision between the player and the drop
+function checkCollision(player, drop) {
+  return (
+    player.left() <= drop.x &&
+    drop.x <= player.right() &&
+    player.top() <= drop.y &&
+    drop.y <= player.bottom()
+  );
 }
 
 function animation(x) {
@@ -29,7 +46,6 @@ animation();
 
 // Check for keydown events
 document.onkeydown = event => {
-  console.log(event.keyCode);
   switch (event.keyCode) {
     // Left
     case 37:
@@ -42,6 +58,5 @@ document.onkeydown = event => {
   }
 };
 document.onkeyup = event => {
-  console.log(event.keyCode);
   player.direction = "";
 };
